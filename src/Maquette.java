@@ -55,6 +55,7 @@ public class Maquette extends JFrame {
 	 * Create the frame.
 	 */
 	public Maquette() {
+		
 		con = connexion.connexion();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 544, 392);
@@ -144,7 +145,8 @@ public class Maquette extends JFrame {
 			}
 			}catch (SQLException ex){
 			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up de la liste.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}
+		}
+
 		try{
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery("SELECT libelle FROM `qualite`;");

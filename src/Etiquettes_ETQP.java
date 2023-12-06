@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -32,6 +33,7 @@ public class Etiquettes_ETQP extends JFrame {
 	private JPanel contentPane;
 	static Connection con;
 	private JComboBox<String> CB_lot;
+	private String IDaa;
 
 	/**
 	 * Launch the application.
@@ -91,6 +93,7 @@ public class Etiquettes_ETQP extends JFrame {
 			while (rs.next()){
 				int i = 0;
 				CB_lot.addItem(rs.getString("id")+" _ "+rs.getString("datePeche")+" _ "+rs.getString("nom"));
+				IDaa = rs.getString("id");
 			}
 			}catch (SQLException ex){
 			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up de la liste.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
@@ -102,7 +105,6 @@ public class Etiquettes_ETQP extends JFrame {
 	           PDDocument document = new PDDocument();
 	           PDPage page = new PDPage();
 	           document.addPage(page);
-
 	           PDPageContentStream contentStream = new PDPageContentStream(document, page);
 	           
 	           java.util.logging.Logger.getLogger("org.apache.fontbox").setLevel(java.util.logging.Level.SEVERE);
@@ -110,8 +112,35 @@ public class Etiquettes_ETQP extends JFrame {
 	           contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 14);
 	           contentStream.setLeading(14.5f);
 	           contentStream.newLineAtOffset(25, 700);
-	           String line1 = "Étiquette pour le lot ID :";
-	           contentStream.showText(line1);
+	           try {
+	        	   PreparedStatement st = con.prepareStatement("SELECT * FROM lot WHERE lot.id = ?;");
+	        	   st.setString(1, IDaa);
+	        	   ResultSet rs = st.executeQuery();
+	        	   while (rs.next()){
+	        		   int i = 0;
+	        		   String line1a = "ID : "+rs.getString("id")+"        ";
+	        		   contentStream.showText(line1a);
+	        		   String datePeche = "datePeche : "+rs.getString("datePeche")+"        ";
+	        		   contentStream.showText(datePeche);
+	        		   contentStream.newLine(); 
+	        		   contentStream.newLine(); 
+	        		   String idEspece = "idEspece : "+rs.getString("idEspece")+"        ";
+	        		   contentStream.showText(idEspece);
+	        		   String idTaille = "idTaille : "+rs.getString("idTaille")+"        ";
+	        		   contentStream.showText(idTaille);
+	        		   contentStream.newLine(); 
+	        		   contentStream.newLine(); 
+	        		   String idPresentation = "idPresentation : "+rs.getString("idPresentation")+"        ";
+	        		   contentStream.showText(idPresentation);
+	        		   String idQualite = "idQualite : "+rs.getString("idQualite")+"        ";
+	        		   contentStream.showText(idQualite);
+	        		   contentStream.newLine();
+	        		   contentStream.newLine(); 
+	        	   	}
+					}catch (SQLException ex){
+						JOptionPane.showMessageDialog(null, "Une erreur lors de PDFFFFF.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
+					}
+	           
 	           contentStream.endText();
 
 	           contentStream.close();
