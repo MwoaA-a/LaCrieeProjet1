@@ -9,6 +9,8 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
+import main.connexion;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -64,42 +66,11 @@ public class PDFConvert extends JFrame {
 	 */
 	public PDFConvert(String id) {
 		con = connexion.connexion();
-		Update(id);
 		PDFcreator(id);	
 		
 	}
 	
-void Update(String id) {
-		
-		String date = java.time.LocalDate.now()+"";
-		
-		// Création du tableau "idPDF" pour la ComboBox...
-		try{
-			PreparedStatement st = con.prepareStatement("SELECT COUNT(*) as total FROM `lot`WHERE `datePeche` = ?;");
-			st.setString(1, date);
-			ResultSet rs = st.executeQuery();
-			while (rs.next()){
-				int total = rs.getInt("total");
-			    idPDF = new Object[total][2];
-			}
-		}catch (SQLException ex){
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up du tab bat.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
-		// Ajouts des "nom" et "id" pour le tableau idPDF...
-		try{
-			PreparedStatement st = con.prepareStatement("SELECT lot.id, bateau.nom FROM lot INNER JOIN bateau ON lot.idBateau = bateau.id WHERE `datePeche` = ?;");
-			st.setString(1, date);
-			ResultSet rs = st.executeQuery();
-			while (rs.next()){
-				idPDF[(rs.getRow()-1)][0] = rs.getString("nom");
-				idPDF[(rs.getRow()-1)][1] = rs.getString("id");
-			}
-		}catch (SQLException ex){
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up de la liste bateau.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}
-	}
-	
+
 	void PDFcreator(String id) {
         		try {
         	        PDDocument document = new PDDocument();

@@ -9,18 +9,30 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.SqlDateModel;
+import org.jdatepicker.impl.UtilDateModel;
+
+import main.connexion;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.Vector;
 
 import javax.swing.JScrollPane;
@@ -28,6 +40,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
 import java.awt.Color;
+import javax.swing.JTextPane;
+import javax.swing.JFormattedTextField;
 
 public class ListLot extends JFrame {
 
@@ -37,6 +51,8 @@ public class ListLot extends JFrame {
 	private JTable table;
 	static Connection con;
 	private static DefaultTableModel model;
+	private static JDatePickerImpl datePicker;
+
 
 	/**
 	 * Launch the application.
@@ -111,12 +127,32 @@ public class ListLot extends JFrame {
 		btnAjouter.setBounds(754, 103, 168, 26);
 		btnAjouter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LotAdd frame = new LotAdd();
+				java.sql.Date selectedDate = (java.sql.Date) datePicker.getModel().getValue();
+				LotAdd frame = new LotAdd(selectedDate);
 				frame.setLocationRelativeTo(null); // Permet d'avoir le frame au milieu de l'écran
 				frame.setVisible(true);
 			}
 		});
 		contentPane.add(btnAjouter);
+		
+		final SqlDateModel model = new SqlDateModel();
+		Calendar now = Calendar.getInstance();
+		model.setDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+		model.setSelected(true);
+		Properties p = new Properties();
+		p.put("text.today", "Aujourd'hui");
+		p.put("text.month", "Mois");
+		p.put("text.year", "Année");
+		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+		datePicker = new JDatePickerImpl(datePanel, new main.DateLabelFormatter()); 
+		contentPane.add(datePicker);
+		datePicker.setBounds(561, 29, 139, 26);
+		model.addPropertyChangeListener(new PropertyChangeListener() {
+		    @Override
+		    public void propertyChange(PropertyChangeEvent evt) {
+		    	updateTable();
+		    }
+		});
 		
 		TableAdd();
 		updateTable();
@@ -217,10 +253,11 @@ public class ListLot extends JFrame {
 	static void updateTable() {
 		model.setRowCount(0);
 	// Ajouter les données au modèle à partir de la base de données
-		String date = java.time.LocalDate.now()+"";
+		java.sql.Date selectedDate = (java.sql.Date) datePicker.getModel().getValue();
 		PreparedStatement st;
 		try {
-			st = con.prepareStatement("SELECT lot.id, lot.`datePeche`, espece.nom as nomEsp, qualite.libelle as qualLibelle, taille.specification, presentation.libelle as presLibelle , bateau.nom as batNom FROM lot INNER JOIN bateau ON lot.idBateau = bateau.id INNER JOIN espece ON lot.idEspece = espece.id INNER JOIN taille ON lot.idTaille = taille.id INNER JOIN qualite ON lot.idQualite = qualite.id INNER JOIN presentation ON lot.idPresentation = presentation.id ORDER BY lot.id DESC;");
+			st = con.prepareStatement("SELECT lot.id, lot.`datePeche`, espece.nom as nomEsp, qualite.libelle as qualLibelle, taille.specification, presentation.libelle as presLibelle , bateau.nom as batNom FROM lot INNER JOIN bateau ON lot.idBateau = bateau.id INNER JOIN espece ON lot.idEspece = espece.id INNER JOIN taille ON lot.idTaille = taille.id INNER JOIN qualite ON lot.idQualite = qualite.id INNER JOIN presentation ON lot.idPresentation = presentation.id WHERE datePeche = ? ORDER BY lot.id DESC ;");
+			st.setString(1, selectedDate+"");
 			ResultSet rs = st.executeQuery();
 			while (rs.next()){
 				model.addRow(new Object[]{rs.getString("id"), rs.getString("datePeche") ,rs.getString("batNom"),rs.getString("nomEsp"), rs.getString("specification"), rs.getString("qualLibelle"), rs.getString("presLibelle")});

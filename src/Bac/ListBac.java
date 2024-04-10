@@ -60,7 +60,7 @@ public class ListBac extends JFrame {
 	public ListBac(String id) {
 		setTitle("Gestion des bacs");
 		idGlo = id;
-		con = Lot.connexion.connexion();
+		con = main.connexion.connexion();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 635, 261);
 		contentPane = new JPanel();

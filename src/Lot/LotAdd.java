@@ -5,6 +5,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import main.connexion;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
@@ -53,7 +56,7 @@ public class LotAdd extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LotAdd frame = new LotAdd();
+					ListLot frame = new ListLot();
 					frame.setLocationRelativeTo(null); // Permet d'avoir le frame au milieu de l'écran
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -66,10 +69,10 @@ public class LotAdd extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LotAdd() {
+	public LotAdd(java.util.Date Date) {
 		setTitle("Création d'un lot");
 		
-		con = connexion.connexion();
+		con = main.connexion.connexion();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(50, 50, 544, 392);
 		contentPane = new JPanel();
@@ -78,7 +81,10 @@ public class LotAdd extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		lbl_Titre = new JLabel("Création d'un nouveau lot");
+		Locale locale = new Locale("fr", "FR");
+		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
+		String date = dateFormat.format(Date);
+		lbl_Titre = new JLabel("Création d'un nouveau lot pour le " + date);;
 		lbl_Titre.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		lbl_Titre.setBounds(20, 11, 498, 39);
 		contentPane.add(lbl_Titre);
@@ -148,7 +154,7 @@ public class LotAdd extends JFrame {
 		btn_send.setBackground(new Color(0, 51, 204));
 		btn_send.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {   
-				send();
+				send(Date);
 			}
 		});
 		contentPane.add(btn_send);
@@ -157,13 +163,6 @@ public class LotAdd extends JFrame {
 	}
 	
 	void Update() {
-		
-		// Titre de la page
-		Locale locale = new Locale("fr", "FR");
-		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
-		java.util.Date currentDate = new java.util.Date();
-		String date = dateFormat.format(currentDate);
-		lbl_Titre.setText("Création d'un nouveau lot pour le " + date);
 
 		
 		// Création du tableau "bat" pour les bateaux...
@@ -291,7 +290,7 @@ public class LotAdd extends JFrame {
 			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up de la liste pres.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
 		}	}
 	
-	void send() {
+	void send(java.util.Date Date) {
 		
 		int result = JOptionPane.showConfirmDialog(null, "Voulez-vous envoyer le nouveau lot ?", "Confirmer l'envoi", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
@@ -299,12 +298,11 @@ public class LotAdd extends JFrame {
 				JOptionPane.showMessageDialog(null, "Veuillez séléctionnez une valeurs.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
 			}else {
 				try {
-					   String date = java.time.LocalDate.now()+"";
 					   
 					   PreparedStatement st6 = con.prepareStatement("INSERT INTO `lot` (`datePeche`, `idBateau`, `idEspece`, `idTaille`, `idPresentation`, `idQualite`) VALUES (?, ?, ?, ?, ?, ?);");
 					   
 					   // ENVOIR DE LA REQ SQL ......
-					   st6.setString(1, date);
+					   st6.setString(1, Date+"");
 					   st6.setString(2, (bat[CB_Bateau.getSelectedIndex()-1][1]+""));
 					   st6.setString(3, (esp[CB_Espe.getSelectedIndex()-1][1]+""));
 					   st6.setString(4, (tail[CB_taille.getSelectedIndex()-1][1]+""));

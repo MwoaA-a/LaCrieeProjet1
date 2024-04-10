@@ -19,6 +19,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JButton;
@@ -53,7 +55,7 @@ public class BacAdd extends JFrame {
 	 * Create the frame.
 	 */
 	public BacAdd(String id) {
-		con = Lot.connexion.connexion();
+		con = main.connexion.connexion();
 		setTitle("Création d'un Bac");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 441, 204);
@@ -136,24 +138,31 @@ public class BacAdd extends JFrame {
 			}else {
 				try {
 					PreparedStatement st3;
-					st3 = con.prepareStatement("SELECT COUNT(*) as toto FROM `bac` WHERE idLot = ? ;");
+					st3 = con.prepareStatement("SELECT id FROM `bac` WHERE idLot = ? ORDER BY id ASC;");
 					st3.setString(1, id);
 					ResultSet rs2 = st3.executeQuery();
+					// Créer une liste pour stocker tous les id existants
+					List<Integer> existingIds = new ArrayList<>();
+
 					while (rs2.next()){
-						PreparedStatement st5;
-						st5 = con.prepareStatement("SELECT id FROM `bac` WHERE idLot = ? ;");
-						st5.setString(1, id);
-						ResultSet rs4 = st5.executeQuery();
-						while (rs4.next()){
-							for(i = 1; i<=rs2.getInt("toto"); i++) {
-								if(i!=rs4.getInt("id")) {
-									idBac = i;
-								}else {
-									idBac = rs2.getInt("toto")+1;
-								}
-							}
-						}
+					    existingIds.add(rs2.getInt("id"));
 					}
+					// Trouver le premier id manquant
+					int nextId = 1;
+					for (int existingId : existingIds) {
+					    if (existingId == nextId) {
+					        nextId++;
+					    } else {
+					        break; // On a trouvé le premier id manquant, on arrête la boucle
+					    }
+					}
+					// Si aucun id manquant n'est trouvé, alors le prochain idBac est simplement le total des id existants + 1
+					if (nextId == existingIds.size() + 1) {
+					    nextId = existingIds.size() + 1;
+					}
+					// nextId est maintenant le prochain idBac
+					idBac = nextId;
+					
 					PreparedStatement st2;
 					st2 = con.prepareStatement("SELECT idBateau, datePeche FROM `lot` WHERE id = ? ;");
 					st2.setString(1, id);
@@ -184,10 +193,10 @@ public class BacAdd extends JFrame {
 					      ListBac.updateTable();
 					      dispose();
 					  } else {
-					      JOptionPane.showMessageDialog(null, "Une erreur s'est produite eX01.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
+					      JOptionPane.showMessageDialog(null, "Une erreur s'est produite eX01.", "Erreur", JOptionPane.ERROR_MESSAGE);
 					  }
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, "Une erreur s'est produite eX02.", "Erreur", JOptionPane.ERROR_MESSAGE);
 					e.printStackTrace();
 				}
 				  
