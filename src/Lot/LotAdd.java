@@ -1,3 +1,4 @@
+package Lot;
 import java.awt.EventQueue;
 
 
@@ -26,7 +27,7 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.Color;
 
-public class Maquette extends JFrame {
+public class LotAdd extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	static Connection con;
@@ -52,7 +53,7 @@ public class Maquette extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Maquette frame = new Maquette();
+					LotAdd frame = new LotAdd();
 					frame.setLocationRelativeTo(null); // Permet d'avoir le frame au milieu de l'écran
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -65,7 +66,8 @@ public class Maquette extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Maquette() {
+	public LotAdd() {
+		setTitle("Création d'un lot");
 		
 		con = connexion.connexion();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
