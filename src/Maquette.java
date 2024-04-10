@@ -320,6 +320,7 @@ public class Maquette extends JFrame {
 					   if (rs6>0) {
 					       JOptionPane.showMessageDialog(null, "L'Ajout a été effectué.", "Ajout", JOptionPane.INFORMATION_MESSAGE);
 					       ListLot.updateTable();
+					       dispose();
 					   } else {
 					       JOptionPane.showMessageDialog(null, "Une erreur s'est produite eX01.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
 					   }

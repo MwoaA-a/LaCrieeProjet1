@@ -60,7 +60,7 @@ public class ListLot extends JFrame {
 	public ListLot() {
 		con = connexion.connexion();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 837, 280);
+		setBounds(100, 100, 959, 280);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -76,27 +76,27 @@ public class ListLot extends JFrame {
 		btnSupprimer.setForeground(Color.WHITE);
 		btnSupprimer.setEnabled(false);
 		btnSupprimer.setBackground(new Color(204, 0, 51));
-		btnSupprimer.setBounds(631, 208, 168, 26);
+		btnSupprimer.setBounds(754, 207, 168, 26);
 		contentPane.add(btnSupprimer);
 		
 		JButton btnVoirBacs = new JButton("Voir les bacs associés");
 		btnVoirBacs.setForeground(Color.WHITE);
 		btnVoirBacs.setEnabled(false);
 		btnVoirBacs.setBackground(new Color(0, 0, 153));
-		btnVoirBacs.setBounds(631, 67, 168, 26);
+		btnVoirBacs.setBounds(754, 66, 168, 26);
 		contentPane.add(btnVoirBacs);
 		
 		JButton btnPDF = new JButton("Convertion en PDF");
 		btnPDF.setForeground(Color.WHITE);
 		btnPDF.setEnabled(false);
 		btnPDF.setBackground(new Color(0, 0, 153));
-		btnPDF.setBounds(631, 141, 168, 26);
+		btnPDF.setBounds(754, 140, 168, 26);
 		contentPane.add(btnPDF);
 		
 		JButton btnAjouter = new JButton("Ajouter");
 		btnAjouter.setForeground(Color.WHITE);
 		btnAjouter.setBackground(new Color(0, 51, 204));
-		btnAjouter.setBounds(631, 104, 168, 26);
+		btnAjouter.setBounds(754, 103, 168, 26);
 		btnAjouter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Maquette frame = new Maquette();
@@ -170,14 +170,24 @@ public class ListLot extends JFrame {
 		table.setModel(model);
 		contentPane.add(JScroll);
 		
-		
-		model.addColumn("N°lot");
+		// Modifie le titre des colonnes
+		model.addColumn("N° lot");
+		model.addColumn("Date Pêche");
 		model.addColumn("Bateau");
 		model.addColumn("Espèce");
 		model.addColumn("Taille");
 		model.addColumn("Qualité");
 		model.addColumn("Présentation");
-//		model.addColumn("Poids brut");
+		
+		// Modifie la taille des colonnes
+		table.getColumnModel().getColumn(0).setPreferredWidth(20);
+		table.getColumnModel().getColumn(1).setPreferredWidth(60);
+		table.getColumnModel().getColumn(2).setPreferredWidth(80);
+		table.getColumnModel().getColumn(3).setPreferredWidth(120);
+		table.getColumnModel().getColumn(4).setPreferredWidth(60);
+		table.getColumnModel().getColumn(5).setPreferredWidth(50);
+		table.getColumnModel().getColumn(6).setPreferredWidth(40);
+		
 	}
 	
 	private void initTable() {
@@ -187,7 +197,9 @@ public class ListLot extends JFrame {
 		table.setDefaultEditor(Object.class, null);
 		JScroll = new JScrollPane();
 		JScroll.setViewportView(table);
-		JScroll.setBounds(30, 66, 566, 167);
+		JScroll.setBounds(30, 66, 670, 167);
+		
+		
 	}
 	
 	static void updateTable() {
@@ -199,7 +211,8 @@ public class ListLot extends JFrame {
 			st = con.prepareStatement("SELECT lot.id, lot.`datePeche`, espece.nom as nomEsp, qualite.libelle as qualLibelle, taille.specification, presentation.libelle as presLibelle , bateau.nom as batNom FROM lot INNER JOIN bateau ON lot.idBateau = bateau.id INNER JOIN espece ON lot.idEspece = espece.id INNER JOIN taille ON lot.idTaille = taille.id INNER JOIN qualite ON lot.idQualite = qualite.id INNER JOIN presentation ON lot.idPresentation = presentation.id ORDER BY lot.id DESC;");
 			ResultSet rs = st.executeQuery();
 			while (rs.next()){
-				model.addRow(new Object[]{rs.getString("id"), rs.getString("datePeche") ,rs.getString("batNom"), rs.getString("specification"), rs.getString("qualLibelle"), rs.getString("presLibelle")});
+				model.addRow(new Object[]{rs.getString("id"), rs.getString("datePeche") ,rs.getString("batNom"),rs.getString("nomEsp"), rs.getString("specification"), rs.getString("qualLibelle"), rs.getString("presLibelle")});
+				
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up du tab.", "Erreur", JOptionPane.ERROR_MESSAGE);
