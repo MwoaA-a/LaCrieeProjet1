@@ -70,7 +70,6 @@ public class ListLot extends JFrame {
 			}
 		});
 	}
-
 	/**
 	 * Create the frame.
 	 */
