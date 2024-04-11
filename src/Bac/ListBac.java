@@ -104,6 +104,23 @@ public class ListBac extends JFrame {
 			}
 		});
 		contentPane.add(btnRetour);
+		
+		JButton btnModif = new JButton("Modifier");
+		btnModif.setForeground(Color.WHITE);
+		btnModif.setEnabled(false);
+		btnModif.setBackground(new Color(0, 51, 204));
+		btnModif.setBounds(436, 116, 168, 26);
+		btnModif.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				String idBac = (String) table.getModel().getValueAt(row, 0);
+				BacModif frame = new BacModif(id, idBac );
+				frame.setLocationRelativeTo(null); // Permet d'avoir le frame au milieu de l'écran
+				frame.setVisible(true);
+			}
+		});
+		contentPane.add(btnModif);
+		
 		TableAdd();
 		updateTable();
 		
@@ -134,9 +151,15 @@ public class ListBac extends JFrame {
  	    			btnSupprimer.setEnabled(true);
  	    			btnSupprimer.setBackground(new Color(255, 0, 51));
  	    			
+ 	    			btnModif.setEnabled(true);
+ 	    			btnModif.setBackground(new Color(0, 51, 204));
+ 	    			
  	    		}else {
  	    			btnSupprimer.setEnabled(false);
  	    			btnSupprimer.setBackground(new Color(204, 0, 51));
+ 	    			
+ 	    			btnModif.setEnabled(false);
+ 	    			btnModif.setBackground(new Color(0, 0, 153));
  	    		}
  	    	}
  	    });
@@ -149,6 +172,7 @@ public class ListBac extends JFrame {
 		contentPane.setLayout(null);
 		table.setModel(model);
 		contentPane.add(JScroll);
+		
 		
 		// Modifie le titre des colonnes
 		model.addColumn("N° Bac");

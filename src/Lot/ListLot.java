@@ -78,7 +78,7 @@ public class ListLot extends JFrame {
 		setTitle("Gestion des lots");
 		con = connexion.connexion();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 959, 304);
+		setBounds(100, 100, 959, 311);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -94,7 +94,7 @@ public class ListLot extends JFrame {
 		btnSupprimer.setForeground(Color.WHITE);
 		btnSupprimer.setEnabled(false);
 		btnSupprimer.setBackground(new Color(204, 0, 51));
-		btnSupprimer.setBounds(754, 207, 168, 26);
+		btnSupprimer.setBounds(754, 214, 168, 26);
 		contentPane.add(btnSupprimer);
 		
 		JButton btnVoirBacs = new JButton("Voir les bacs associés");
@@ -134,6 +134,24 @@ public class ListLot extends JFrame {
 			}
 		});
 		contentPane.add(btnAjouter);
+		
+		JButton btnLotModif = new JButton("Modifier");
+		btnLotModif.setForeground(Color.WHITE);
+		btnLotModif.setEnabled(false);
+		btnLotModif.setEnabled(false);
+		btnLotModif.setBackground(new Color(0, 0, 153));
+		btnLotModif.setBounds(754, 177, 168, 26);
+		btnLotModif.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				java.sql.Date selectedDate = (java.sql.Date) datePicker.getModel().getValue();
+				int row = table.getSelectedRow();
+				String idLot = (String) table.getModel().getValueAt(row, 0);
+				LotModif frame = new LotModif(selectedDate, idLot);
+				frame.setLocationRelativeTo(null); // Permet d'avoir le frame au milieu de l'écran
+				frame.setVisible(true);
+			}
+		});
+		contentPane.add(btnLotModif);
 		
 		final SqlDateModel model = new SqlDateModel();
 		Calendar now = Calendar.getInstance();
@@ -195,6 +213,9 @@ public class ListLot extends JFrame {
  	    			btnVoirBacs.setEnabled(true);
  	    			btnVoirBacs.setBackground(new Color(0, 51, 204));
 
+ 	    			btnLotModif.setEnabled(true);
+ 	    			btnLotModif.setBackground(new Color(0, 51, 204));
+
  	    			btnPDF.setEnabled(true);
  	    			btnPDF.setBackground(new Color(0, 51, 204));
  	    		}else {
@@ -203,6 +224,9 @@ public class ListLot extends JFrame {
  	    			
  	    			btnVoirBacs.setEnabled(false);
  	    			btnVoirBacs.setBackground(new Color(0, 0, 153));
+ 	    			
+ 	    			btnLotModif.setEnabled(false);
+ 	    			btnLotModif.setBackground(new Color(0, 0, 153));
  	    			
  	    			btnPDF.setEnabled(false);
  	    			btnPDF.setBackground(new Color(0, 0, 153));
@@ -245,7 +269,7 @@ public class ListLot extends JFrame {
 		table.setDefaultEditor(Object.class, null);
 		JScroll = new JScrollPane();
 		JScroll.setViewportView(table);
-		JScroll.setBounds(30, 66, 670, 167);
+		JScroll.setBounds(30, 66, 670, 175);
 		
 		
 	}
