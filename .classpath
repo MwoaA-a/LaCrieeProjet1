@@ -6,8 +6,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/titib/Documents/Java/mysql-connector-j-8.0.32.jar"/>
-	<classpathentry kind="lib" path="C:/Users/titib/Documents/Java/pdfbox-app-3.0.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/titib/Documents/Java/jdatepicker-1.3.4.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-j-8.0.32.jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-app-3.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/jdatepicker-1.3.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
