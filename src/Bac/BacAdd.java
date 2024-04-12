@@ -6,8 +6,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Lot.ListLot;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -31,7 +29,7 @@ public class BacAdd extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	static Connection con;
-	private JComboBox CB_TB;
+	private JComboBox<String> CB_TB;
 	public  Object[][] tyba;
 
 	/**
@@ -74,7 +72,7 @@ public class BacAdd extends JFrame {
 		lbl_typeBac.setBounds(74, 75, 101, 14);
 		contentPane.add(lbl_typeBac);
 		
-		CB_TB = new JComboBox();
+		CB_TB = new JComboBox<String>();
 		CB_TB.setBounds(185, 71, 190, 22);
 		contentPane.add(CB_TB);
 		
@@ -127,7 +125,6 @@ public class BacAdd extends JFrame {
 	
 	void send(String id) {
 		int idBac = 0;
-		int i = 0;
 		String datePeche = null;
 		String idBat = null;
 		

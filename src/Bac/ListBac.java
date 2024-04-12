@@ -8,8 +8,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import Lot.LotAdd;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -58,7 +56,7 @@ public class ListBac extends JFrame {
 	 * Create the frame.
 	 */
 	public ListBac(String id) {
-		setTitle("Gestion des bacs");
+		setTitle("Gestion des bacs pour le lot n°"+id);
 		idGlo = id;
 		con = main.connexion.connexion();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -205,7 +203,6 @@ public class ListBac extends JFrame {
 	static void updateTable() {
 		model.setRowCount(0);
 	// Ajouter les données au modèle à partir de la base de données
-		String date = java.time.LocalDate.now()+"";
 		PreparedStatement st;
 		try {
 			st = con.prepareStatement("SELECT bac.`id`, bateau.nom as 'nomBat', datePeche, bac.IdLot, typebac.tare  FROM `bac` INNER JOIN bateau ON bac.Idbateau = bateau.id INNER JOIN typebac ON typebac.id = bac.idTypeBac WHERE bac.idLot = ? ORDER BY id ASC;");

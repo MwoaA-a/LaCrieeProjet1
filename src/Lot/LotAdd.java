@@ -5,25 +5,17 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import main.connexion;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.border.Border;
-
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
-import java.time.LocalDate;
 import java.util.Locale;
 
 import javax.swing.JComboBox;
@@ -109,27 +101,27 @@ public class LotAdd extends JFrame {
 		lbl_pres.setBounds(124, 211, 81, 14);
 		contentPane.add(lbl_pres);
 		
-		CB_Bateau = new JComboBox();
+		CB_Bateau = new JComboBox<String>();
 		CB_Bateau.setBounds(215, 107, 190, 22);
 		contentPane.add(CB_Bateau);
 		CB_Bateau.addItem("...");
 		
-		CB_Qual = new JComboBox();
+		CB_Qual = new JComboBox<String>();
 		CB_Qual.setBounds(215, 132, 190, 22);
 		contentPane.add(CB_Qual);
 		CB_Qual.addItem("...");
 		
-		CB_taille = new JComboBox();
+		CB_taille = new JComboBox<String>();
 		CB_taille.setBounds(215, 157, 190, 22);
 		contentPane.add(CB_taille);
 		CB_taille.addItem("...");
 		
-		CB_Espe = new JComboBox();
+		CB_Espe = new JComboBox<String>();
 		CB_Espe.setBounds(215, 182, 190, 22);
 		contentPane.add(CB_Espe);
 		CB_Espe.addItem("...");
 		
-		CB_Prése = new JComboBox();
+		CB_Prése = new JComboBox<String>();
 		CB_Prése.setBounds(215, 207, 190, 22);
 		contentPane.add(CB_Prése);
 		CB_Prése.addItem("...");

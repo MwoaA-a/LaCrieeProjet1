@@ -6,8 +6,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Lot.ListLot;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -19,9 +17,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.Color;
@@ -31,7 +26,7 @@ public class BacModif extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	static Connection con;
-	private JComboBox CB_TB;
+	private JComboBox<String> CB_TB;
 	public  Object[][] tyba;
 
 	/**
@@ -56,7 +51,7 @@ public class BacModif extends JFrame {
 	 */
 	public BacModif(String idlot, String idBac) {
 		con = main.connexion.connexion();
-		setTitle("Modification d'un Bac");
+		setTitle("Modification du bac n°"+idBac+" pour le lot n°"+idlot);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 557, 204);
 		contentPane = new JPanel();
@@ -74,7 +69,7 @@ public class BacModif extends JFrame {
 		lbl_typeBac.setBounds(118, 75, 101, 14);
 		contentPane.add(lbl_typeBac);
 		
-		CB_TB = new JComboBox();
+		CB_TB = new JComboBox<String>();
 		CB_TB.setBounds(229, 71, 190, 22);
 		contentPane.add(CB_TB);
 		
@@ -125,11 +120,7 @@ public class BacModif extends JFrame {
 				}
 	}
 	
-	void send(String idLot, String idBac) {
-		int i = 0;
-		String datePeche = null;
-		String idBat = null;
-		
+	void send(String idLot, String idBac) {		
 		int result = JOptionPane.showConfirmDialog(null, "Voulez-vous modifier le bac ?", "Confirmer l'envoi", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
 			if((CB_TB.getSelectedItem()=="...")){
