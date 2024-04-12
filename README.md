@@ -60,14 +60,7 @@ Forte de ses atouts mais aussi consciente des enjeux, la criée de Poulgoazec ve
 
 ## Ajout du projet :
 
-Pour pouvoir tester le projet, il faut la base de données SQL, les.jar externes au projet, et bien évidemment le projet.
+Pour pouvoir tester le projet, il faut la base de données SQL, et bien évidemment le projet.
 
 ### La Base de données MySQL :
 
-
-
-### Les .jar externes :
-
-- MySQL-connector-j-8.0.32.jar
-- JDatePicker-1.3.4.jar
-- pdfbox-app-3.0.0.jar
