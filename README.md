@@ -60,7 +60,7 @@ Forte de ses atouts mais aussi consciente des enjeux, la criée de Poulgoazec ve
 
 ## Ajout du projet :
 
-Pour pouvoir tester le projet, il faut la base de données MySQL, et bien évidemment le projet, il y a aussi une release disponible qui utilise une base de données en ligne, donc il est uniquement nécessaire de télécharger le.jar.
+Pour pouvoir tester le projet, il faut la base de données MySQL, et bien évidemment le projet, il y a aussi une release disponible qui utilise une base de données en ligne, donc il est uniquement nécessaire de télécharger le .jar.
 
 ### La Base de données MySQL :
 
