@@ -64,3 +64,4 @@ Pour pouvoir tester le projet, il faut la base de données SQL, et bien évidemm
 
 ### La Base de données MySQL :
 
+[Base de données MySQL](bddcriee2.sql)
