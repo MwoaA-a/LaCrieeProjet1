@@ -139,28 +139,6 @@ INSERT INTO `bateau` (`id`, `nom`, `immatriculation`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `doctrine_migration_versions`
---
-
-DROP TABLE IF EXISTS `doctrine_migration_versions`;
-CREATE TABLE IF NOT EXISTS `doctrine_migration_versions` (
-  `version` varchar(191) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `executed_at` datetime DEFAULT NULL,
-  `execution_time` int DEFAULT NULL,
-  PRIMARY KEY (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-
---
--- Déchargement des données de la table `doctrine_migration_versions`
---
-
-INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
-('DoctrineMigrations\\Version20240110134040', '2024-01-11 10:33:15', 89),
-('DoctrineMigrations\\Version20240110134641', '2024-01-11 10:33:15', 57);
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `espece`
 --
 
