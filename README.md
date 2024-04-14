@@ -62,6 +62,6 @@ Forte de ses atouts mais aussi consciente des enjeux, la criée de Poulgoazec ve
 
 Pour pouvoir tester le projet, il faut la base de données SQL, et bien évidemment le projet.
 
-### La Base de données SQL :
+### La Base de données MySQL :
 
-[Base de données SQL](bddcriee2.sql)
+[Base de données MySQL](bddcriee2.sql)
