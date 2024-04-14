@@ -125,8 +125,6 @@ public class BacAdd extends JFrame {
 	
 	void send(String id) {
 		int idBac = 0;
-		String datePeche = null;
-		String idBat = null;
 		
 		int result = JOptionPane.showConfirmDialog(null, "Voulez-vous envoyer le nouveau bac ?", "Confirmer l'envoi", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
@@ -160,14 +158,6 @@ public class BacAdd extends JFrame {
 					// nextId est maintenant le prochain idBac
 					idBac = nextId;
 					
-					PreparedStatement st2;
-					st2 = con.prepareStatement("SELECT idBateau, datePeche FROM `lot` WHERE id = ? ;");
-					st2.setString(1, id);
-					ResultSet rs = st2.executeQuery();
-					while (rs.next()){
-						datePeche = rs.getString("datePeche");
-						idBat = rs.getString("idBateau");
-					}
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(null, "Une erreur lors de l'up du tab.", "Erreur", JOptionPane.ERROR_MESSAGE);
 				}
@@ -175,13 +165,11 @@ public class BacAdd extends JFrame {
 				
 				try {
 					PreparedStatement st6;
-					st6 = con.prepareStatement("INSERT INTO `bac` (`id`, `Idbateau`, `datePeche`, `IdLot`, `idTypeBac`) VALUES (?, ?, ?, ?, ?);");
+					st6 = con.prepareStatement("INSERT INTO `bac` (`id`, `IdLot`, `idTypeBac`) VALUES (?, ?, ?);");
 					// ENVOIR DE LA REQ SQL ......
 					  st6.setInt(1, idBac);
-					  st6.setString(2, idBat);
-					  st6.setString(3, datePeche);
-					  st6.setString(4, id);
-					  st6.setString(5, (tyba[CB_TB.getSelectedIndex()][1]+""));
+					  st6.setString(2, id);
+					  st6.setString(3, (tyba[CB_TB.getSelectedIndex()][1]+""));
 					  
 					  int rs6 = st6.executeUpdate();
 					   

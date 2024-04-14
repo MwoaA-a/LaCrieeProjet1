@@ -205,7 +205,7 @@ public class ListBac extends JFrame {
 	// Ajouter les données au modèle à partir de la base de données
 		PreparedStatement st;
 		try {
-			st = con.prepareStatement("SELECT bac.`id`, bateau.nom as 'nomBat', datePeche, bac.IdLot, typebac.tare  FROM `bac` INNER JOIN bateau ON bac.Idbateau = bateau.id INNER JOIN typebac ON typebac.id = bac.idTypeBac WHERE bac.idLot = ? ORDER BY id ASC;");
+			st = con.prepareStatement("SELECT bac.`id`, bateau.nom as 'nomBat', lot.datePeche, bac.IdLot, typebac.tare FROM `bac` INNER JOIN typebac ON typebac.id = bac.idTypeBac INNER JOIN lot ON lot.id = bac.IdLot INNER JOIN bateau ON lot.Idbateau = bateau.id WHERE bac.idLot = ? ORDER BY id ASC;");
 			st.setString(1, idGlo);
 			ResultSet rs = st.executeQuery();
 			while (rs.next()){
