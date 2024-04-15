@@ -80,6 +80,11 @@ public class BacAdd extends JFrame {
 		btn_retour.setForeground(Color.WHITE);
 		btn_retour.setBackground(new Color(255, 0, 51));
 		btn_retour.setBounds(36, 131, 123, 23);
+		btn_retour.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		contentPane.add(btn_retour);
 		
 		JButton btn_send = new JButton("Envoyer le bac");
