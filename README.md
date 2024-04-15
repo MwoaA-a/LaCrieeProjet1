@@ -40,7 +40,7 @@ Forte de ses atouts mais aussi consciente des enjeux, la criée de Poulgoazec ve
 
 ![modèle_entité_association](https://github.com/MwoaA-a/LaCrieeProjet1/assets/145756714/e0d51518-44ce-4677-a506-35d89a10a578)
 
-### Les Users Stories à réaliser :
+### Les Users Stories à réaliser (Toutes n'ont pas été réalisées) :
 
 - En tant que vétérinaire je veux pouvoir créer une pêche du jour afin d’enregistrer les bateaux qui proposent des bacs à la vente
 - En tant que vétérinaire je veux pouvoir supprimer une pêche du jour afin de corriger des erreurs éventuelles.
