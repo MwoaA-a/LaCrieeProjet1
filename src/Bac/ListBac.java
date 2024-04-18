@@ -19,7 +19,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -28,12 +27,12 @@ import java.awt.Color;
 public class ListBac extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JScrollPane JScroll;
-	private JTable table;
-	static Connection con;
-	private static DefaultTableModel model;
-	private static String idGlo;
+	public static JPanel contentPane;
+	public static JScrollPane JScroll;
+	public static JTable table;
+	public static Connection con;
+	public static DefaultTableModel model;
+	public static String idGlo;
 
 	/**
 	 * Launch the application.
@@ -119,8 +118,8 @@ public class ListBac extends JFrame {
 		});
 		contentPane.add(btnModif);
 		
-		TableAdd();
-		updateTable();
+		controller.Bac_Controller.ListBacTableAdd();
+		controller.Bac_Controller.updateListBacTable();
 		
 		btnSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -137,7 +136,7 @@ public class ListBac extends JFrame {
 					} catch (SQLException e1) {
 						JOptionPane.showMessageDialog(null, "Une erreur lors de la suppression.", "Erreur", JOptionPane.ERROR_MESSAGE);
 					}
-					updateTable();
+					controller.Bac_Controller.updateListBacTable();
 	            }
 			}
 		});
@@ -161,59 +160,5 @@ public class ListBac extends JFrame {
  	    		}
  	    	}
  	    });
-	}
-	
-	
-	private void TableAdd() {
-		model = new DefaultTableModel();
-		initTable();
-		contentPane.setLayout(null);
-		table.setModel(model);
-		contentPane.add(JScroll);
-		
-		
-		// Modifie le titre des colonnes
-		model.addColumn("N° Bac");
-		model.addColumn("N° Lot");
-		model.addColumn("Date Pêche");
-		model.addColumn("Bateau");
-		model.addColumn("Type Bac");
-		
-		// Modifie la taille des colonnes
-		table.getColumnModel().getColumn(0).setPreferredWidth(30);
-		table.getColumnModel().getColumn(1).setPreferredWidth(30);
-		table.getColumnModel().getColumn(2).setPreferredWidth(80);
-		table.getColumnModel().getColumn(3).setPreferredWidth(80);
-		table.getColumnModel().getColumn(4).setPreferredWidth(50);
-		
-	}
-	
-	private void initTable() {
-		table = new JTable();
-		table.getTableHeader().setReorderingAllowed(false);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setDefaultEditor(Object.class, null);
-		JScroll = new JScrollPane();
-		JScroll.setViewportView(table);
-		JScroll.setBounds(30, 79, 394, 123);
-		
-		
-	}
-	
-	static void updateTable() {
-		model.setRowCount(0);
-	// Ajouter les données au modèle à partir de la base de données
-		PreparedStatement st;
-		try {
-			st = con.prepareStatement("SELECT bac.`id`, bateau.nom as 'nomBat', lot.datePeche, bac.IdLot, typebac.tare FROM `bac` INNER JOIN typebac ON typebac.id = bac.idTypeBac INNER JOIN lot ON lot.id = bac.IdLot INNER JOIN bateau ON lot.Idbateau = bateau.id WHERE bac.idLot = ? ORDER BY id ASC;");
-			st.setString(1, idGlo);
-			ResultSet rs = st.executeQuery();
-			while (rs.next()){
-				model.addRow(new Object[]{rs.getString("id"),rs.getString("idLot"),rs.getString("datePeche"),rs.getString("nomBat"),rs.getString("tare")});
-				
-			}
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up du tab.", "Erreur", JOptionPane.ERROR_MESSAGE);
-		}
 	}
 }

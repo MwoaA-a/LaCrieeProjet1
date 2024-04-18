@@ -6,15 +6,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DateFormat;
 import java.util.Locale;
 
@@ -26,20 +21,20 @@ public class LotAdd extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	static Connection con;
-	private JPanel contentPane;
-	private JComboBox<String> CB_Bateau;
-	private JComboBox<String> CB_Qual;
-	private JComboBox<String> CB_taille;
-	private JComboBox<String> CB_Espe;
-	private JComboBox<String> CB_Prése;
-	private JLabel lbl_Titre;
-	private JButton btn_retour;
-	private JButton btn_send;
-	public  Object[][] bat;
-	public  Object[][] esp;
-	public  Object[][] qual;
-	public  Object[][] tail;
-	public  Object[][] pres;
+	public JPanel contentPane;
+	public static JComboBox<String> CB_Bateau;
+	public static JComboBox<String> CB_Qual;
+	public static JComboBox<String> CB_taille;
+	public static JComboBox<String> CB_Espe;
+	public static JComboBox<String> CB_Prése;
+	public JLabel lbl_Titre;
+	public JButton btn_retour;
+	public JButton btn_send;
+	public static  Object[][] bat;
+	public static Object[][] esp;
+	public static Object[][] qual;
+	public static Object[][] tail;
+	public static Object[][] pres;
 
 	/**
 	 * Launch the application.
@@ -146,182 +141,12 @@ public class LotAdd extends JFrame {
 		btn_send.setBackground(new Color(0, 51, 204));
 		btn_send.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {   
-				send(Date);
+				controller.Lot_Controller.sendLotAdd(Date);
+				dispose();
 			}
 		});
 		contentPane.add(btn_send);
 		
-		Update();
-	}
-	
-	void Update() {
-
-		
-		// Création du tableau "bat" pour les bateaux...
-		try{
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT COUNT(*) as total FROM `bateau`;");
-			while (rs.next()){
-				int total = rs.getInt("total");
-			    bat = new Object[total][2];
-			}
-		}catch (SQLException ex){
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up du tab bat.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
-		// Création du tableau "esp" pour les espèces...
-		try{
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT COUNT(*) as total FROM `espece`;");
-			while (rs.next()){
-				int total = rs.getInt("total");
-			    esp = new Object[total][2];
-			}
-		}catch (SQLException ex){
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up du tab esp.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
-	    // Création du tableau "qual" pour les Qualitées...
-		try{
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT COUNT(*) as total FROM `qualite`;");
-			while (rs.next()){
-				int total = rs.getInt("total");
-			    qual = new Object[total][2];
-			}
-		}catch (SQLException ex){
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up du tab qual.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
-		// Création du tableau "tail" pour les tailles...
-		try{
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT COUNT(*) as total FROM `taille`;");
-			while (rs.next()){
-				int total = rs.getInt("total");
-			    tail = new Object[total][2];
-			}
-		}catch (SQLException ex){
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up du tab tail.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
-		// Création du tableau "pres" pour les presentations...
-		try{
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT COUNT(*) as total FROM `presentation`;");
-			while (rs.next()){
-				int total = rs.getInt("total");
-			    pres = new Object[total][2];
-			}
-		}catch (SQLException ex){
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up du tab pres.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}
-				
-		// Ajouts des "nom" et "id" pour les bateaux...
-		try{
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT nom, id FROM `bateau`;");
-			while (rs.next()){
-				bat[(rs.getRow()-1)][0] = rs.getString("nom");
-				bat[(rs.getRow()-1)][1] = rs.getString("id");
-				CB_Bateau.addItem(rs.getString("nom"));
-			}
-		}catch (SQLException ex){
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up de la liste bateau.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
-		// Ajouts des "nom" et "id" pour les especes...
-		try{
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT nom, id FROM `espece`;");
-			while (rs.next()){
-				esp[(rs.getRow()-1)][0] = rs.getString("nom");
-				esp[(rs.getRow()-1)][1] = rs.getString("id");
-				CB_Espe.addItem(rs.getString("nom"));
-			}
-		}catch (SQLException ex){
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up de la liste especes.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
-		// Ajouts des "nom" et "id" pour les Qualitées...
-		try{
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT libelle, id FROM `qualite`;");
-			while (rs.next()){
-				qual[(rs.getRow()-1)][0] = rs.getString("libelle");
-				qual[(rs.getRow()-1)][1] = rs.getString("id");
-				CB_Qual.addItem(rs.getString("libelle"));
-			}
-		}catch (SQLException ex){
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up de la liste Qualitées.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
-		// Ajouts des "specification" et "id" pour les Tailles...
-		try{
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT specification, id FROM `taille`;");
-			while (rs.next()){
-				tail[(rs.getRow()-1)][0] = rs.getString("specification");
-				tail[(rs.getRow()-1)][1] = rs.getString("id");
-				CB_taille.addItem(rs.getString("specification"));
-			}
-		}catch (SQLException ex){
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up de la liste tail.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
-		// Ajouts des "libelle" et "id" pour les presentations...
-		try{
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT libelle, id FROM `presentation`;");
-			while (rs.next()){
-				pres[(rs.getRow()-1)][0] = rs.getString("libelle");
-				pres[(rs.getRow()-1)][1] = rs.getString("id");
-				CB_Prése.addItem(rs.getString("libelle"));
-			}
-		}catch (SQLException ex){
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up de la liste pres.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-		}	}
-	
-	void send(java.util.Date Date) {
-		
-		int result = JOptionPane.showConfirmDialog(null, "Voulez-vous envoyer le nouveau lot ?", "Confirmer l'envoi", JOptionPane.YES_NO_OPTION);
-        if (result == JOptionPane.YES_OPTION) {
-			if((CB_Prése.getSelectedItem()=="...")||(CB_Bateau.getSelectedItem()=="...")||(CB_Qual.getSelectedItem()=="...")||(CB_taille.getSelectedItem()=="...")||(CB_Espe.getSelectedItem()=="...")) {
-				JOptionPane.showMessageDialog(null, "Veuillez séléctionnez une valeurs.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-			}else {
-				try {
-					   
-					   PreparedStatement st6 = con.prepareStatement("INSERT INTO `lot` (`datePeche`, `idBateau`, `idEspece`, `idTaille`, `idPresentation`, `idQualite`) VALUES (?, ?, ?, ?, ?, ?);");
-					   
-					   // ENVOIR DE LA REQ SQL ......
-					   st6.setString(1, Date+"");
-					   st6.setString(2, (bat[CB_Bateau.getSelectedIndex()-1][1]+""));
-					   st6.setString(3, (esp[CB_Espe.getSelectedIndex()-1][1]+""));
-					   st6.setString(4, (tail[CB_taille.getSelectedIndex()-1][1]+""));
-					   st6.setString(5, (pres[CB_Prése.getSelectedIndex()-1][1]+""));
-					   st6.setString(6, (qual[CB_Qual.getSelectedIndex()-1][1]+""));
-					   
-					   int rs6 = st6.executeUpdate();
-					   
-					   CB_Prése.setSelectedIndex(0);
-					   CB_Qual.setSelectedIndex(0);
-					   CB_taille.setSelectedIndex(0);
-					   CB_Espe.setSelectedIndex(0);
-					   CB_Bateau.setSelectedIndex(0);
-					   
-					   if (rs6>0) {
-					       JOptionPane.showMessageDialog(null, "L'Ajout a été effectué.", "Ajout", JOptionPane.INFORMATION_MESSAGE);
-					       ListLot.updateTable();
-					       dispose();
-					   } else {
-					       JOptionPane.showMessageDialog(null, "Une erreur s'est produite eX01.", "Erreur", JOptionPane.INFORMATION_MESSAGE);
-					   }
-					} catch(SQLException ex) {
-					   JOptionPane.showMessageDialog(null, "Une erreur lors de l'envoie du lot. Error: " +"\n"+ ex.getMessage() + ". SQL State: " + ex.getSQLState() + ". Error Code: " + ex.getErrorCode(), "Erreur", JOptionPane.INFORMATION_MESSAGE);
-					}
-			}
-        }else {
-        	JOptionPane.showMessageDialog(null, "Vous annulez l'envoi du nouveau lot.", "annulation", JOptionPane.INFORMATION_MESSAGE);
-        }
+		controller.Lot_Controller.UpdateLotAdd();
 	}
 }

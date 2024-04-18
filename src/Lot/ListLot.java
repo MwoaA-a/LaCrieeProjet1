@@ -12,8 +12,6 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
-import main.connexion;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -24,7 +22,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Properties;
@@ -37,13 +34,14 @@ import java.awt.Color;
 
 public class ListLot extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JScrollPane JScroll;
-	private JTable table;
-	static Connection con;
-	private static DefaultTableModel model;
-	private static JDatePickerImpl datePicker;
+	public static final long serialVersionUID = 1L;
+	public static JPanel contentPane;
+	public static JScrollPane JScroll;
+	public static JTable table;
+	public static DefaultTableModel model;
+	public static JDatePickerImpl datePicker;
+	static Connection con = main.connexion.connexion();;
+
 
 
 	/**
@@ -67,7 +65,6 @@ public class ListLot extends JFrame {
 	 */
 	public ListLot() {
 		setTitle("Application de gestion de la criée");
-		con = connexion.connexion();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 959, 311);
 		contentPane = new JPanel();
@@ -159,19 +156,18 @@ public class ListLot extends JFrame {
 		model.addPropertyChangeListener(new PropertyChangeListener() {
 		    @Override
 		    public void propertyChange(PropertyChangeEvent evt) {
-		    	updateTable();
+		    	controller.Lot_Controller.updateListLotTable();
 		    }
 		});
 		
-		TableAdd();
-		updateTable();
+		controller.Lot_Controller.ListLotTableAdd();
+		controller.Lot_Controller.updateListLotTable();
 		
 		btnPDF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = table.getSelectedRow();
 				String id = (String) table.getModel().getValueAt(row, 0);
-				PDFConvert frame = new PDFConvert(id);
-				frame.dispose();
+				controller.Lot_Controller.PDFConvert(id);
 			}
 		});
 		
@@ -189,7 +185,7 @@ public class ListLot extends JFrame {
 					} catch (SQLException e1) {
 						JOptionPane.showMessageDialog(null, "Une erreur lors de la suppression.", "Erreur", JOptionPane.ERROR_MESSAGE);
 					}
-					updateTable();
+					controller.Lot_Controller.updateListLotTable();
 	            }
 			}
 		});
@@ -224,62 +220,5 @@ public class ListLot extends JFrame {
  	    		}
  	    	}
  	    });
-	}
-	
-	private void TableAdd() {
-		model = new DefaultTableModel();
-		initTable();
-		contentPane.setLayout(null);
-		table.setModel(model);
-		contentPane.add(JScroll);
-		
-		// Modifie le titre des colonnes
-		model.addColumn("N° lot");
-		model.addColumn("Date Pêche");
-		model.addColumn("Bateau");
-		model.addColumn("Espèce");
-		model.addColumn("Taille");
-		model.addColumn("Qualité");
-		model.addColumn("Présentation");
-		
-		// Modifie la taille des colonnes
-		table.getColumnModel().getColumn(0).setPreferredWidth(20);
-		table.getColumnModel().getColumn(1).setPreferredWidth(60);
-		table.getColumnModel().getColumn(2).setPreferredWidth(80);
-		table.getColumnModel().getColumn(3).setPreferredWidth(120);
-		table.getColumnModel().getColumn(4).setPreferredWidth(60);
-		table.getColumnModel().getColumn(5).setPreferredWidth(50);
-		table.getColumnModel().getColumn(6).setPreferredWidth(40);
-		
-	}
-	
-	private void initTable() {
-		table = new JTable();
-		table.getTableHeader().setReorderingAllowed(false);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setDefaultEditor(Object.class, null);
-		JScroll = new JScrollPane();
-		JScroll.setViewportView(table);
-		JScroll.setBounds(30, 66, 670, 175);
-		
-		
-	}
-	
-	static void updateTable() {
-		model.setRowCount(0);
-	// Ajouter les données au modèle à partir de la base de données
-		java.sql.Date selectedDate = (java.sql.Date) datePicker.getModel().getValue();
-		PreparedStatement st;
-		try {
-			st = con.prepareStatement("SELECT lot.id, lot.`datePeche`, espece.nom as nomEsp, qualite.libelle as qualLibelle, taille.specification, presentation.libelle as presLibelle , bateau.nom as batNom FROM lot INNER JOIN bateau ON lot.idBateau = bateau.id INNER JOIN espece ON lot.idEspece = espece.id INNER JOIN taille ON lot.idTaille = taille.id INNER JOIN qualite ON lot.idQualite = qualite.id INNER JOIN presentation ON lot.idPresentation = presentation.id WHERE datePeche = ? ORDER BY lot.id DESC ;");
-			st.setString(1, selectedDate+"");
-			ResultSet rs = st.executeQuery();
-			while (rs.next()){
-				model.addRow(new Object[]{rs.getString("id"), rs.getString("datePeche") ,rs.getString("batNom"),rs.getString("nomEsp"), rs.getString("specification"), rs.getString("qualLibelle"), rs.getString("presLibelle")});
-				
-			}
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Une erreur lors de l'up du tab.", "Erreur", JOptionPane.ERROR_MESSAGE);
-		}
 	}
 }
