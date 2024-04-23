@@ -76,11 +76,11 @@ public class Lot_Controller {
 		java.sql.Date selectedDate = (java.sql.Date) Lot.ListLot.datePicker.getModel().getValue();
 		PreparedStatement st;
 		try {
-			st = con.prepareStatement("SELECT lot.id, lot.`datePeche`, espece.nom as nomEsp, qualite.libelle as qualLibelle, taille.specification, presentation.libelle as presLibelle , bateau.nom as batNom FROM lot INNER JOIN bateau ON lot.idBateau = bateau.id INNER JOIN espece ON lot.idEspece = espece.id INNER JOIN taille ON lot.idTaille = taille.id INNER JOIN qualite ON lot.idQualite = qualite.id INNER JOIN presentation ON lot.idPresentation = presentation.id WHERE datePeche = ? ORDER BY lot.id DESC ;");
+			st = con.prepareStatement("SELECT lots.id, lots.`date_peche`, espece.nom as nomEsp, qualite.libelle as qualLibelle, taille.specification, presentation.libelle as presLibelle , bateau.nom as batNom FROM lots INNER JOIN bateau ON lots.num_bateau = bateau.id INNER JOIN espece ON lots.espece = espece.id INNER JOIN taille ON lots.id_taille = taille.id INNER JOIN qualite ON lots.id_qualite = qualite.id INNER JOIN presentation ON lots.id_presentation = presentation.id WHERE date_peche = ? ORDER BY lots.id DESC; ;");
 			st.setString(1, selectedDate+"");
 			ResultSet rs = st.executeQuery();
 			while (rs.next()){
-				Lot.ListLot.model.addRow(new Object[]{rs.getString("id"), rs.getString("datePeche") ,rs.getString("batNom"),rs.getString("nomEsp"), rs.getString("specification"), rs.getString("qualLibelle"), rs.getString("presLibelle")});
+				Lot.ListLot.model.addRow(new Object[]{rs.getString("id"), rs.getString("date_peche") ,rs.getString("batNom"),rs.getString("nomEsp"), rs.getString("specification"), rs.getString("qualLibelle"), rs.getString("presLibelle")});
 				
 			}
 		} catch (SQLException e) {
@@ -224,7 +224,7 @@ public class Lot_Controller {
 			}else {
 				try {
 					   
-					   PreparedStatement st6 = con.prepareStatement("INSERT INTO `lot` (`datePeche`, `idBateau`, `idEspece`, `idTaille`, `idPresentation`, `idQualite`) VALUES (?, ?, ?, ?, ?, ?);");
+					   PreparedStatement st6 = con.prepareStatement("INSERT INTO `lots` (`date_peche`, `num_bateau`, `espece`, `id_taille`, `id_presentation`, `id_qualite`, `code_etat`) VALUES (?, ?, ?, ?, ?, ?, 1);");
 					   
 					   // ENVOIR DE LA REQ SQL ......
 					   st6.setString(1, Date+"");
@@ -387,12 +387,12 @@ public class Lot_Controller {
 		
 		// Selectionne les bon items des ComboBoxs...
 				try{
-					PreparedStatement st = con.prepareStatement("SELECT lot.id, lot.idBateau, espece.nom as nomEsp, qualite.libelle as qualLibelle, taille.specification, presentation.libelle as presLibelle FROM lot INNER JOIN espece ON lot.idEspece = espece.id INNER JOIN taille ON lot.idTaille = taille.id INNER JOIN qualite ON lot.idQualite = qualite.id INNER JOIN presentation ON lot.idPresentation = presentation.id WHERE lot.id = ? ;");
+					PreparedStatement st = con.prepareStatement("SELECT lots.id, lots.num_bateau, espece.nom as nomEsp, qualite.libelle as qualLibelle, taille.specification, presentation.libelle as presLibelle FROM lots INNER JOIN espece ON lots.espece = espece.id INNER JOIN taille ON lots.id_taille = taille.id INNER JOIN qualite ON lots.id_qualite = qualite.id INNER JOIN presentation ON lots.id_presentation = presentation.id WHERE lots.id = ?;");
 					st.setString(1, idLot);
 					ResultSet rs = st.executeQuery();
 					
 					while (rs.next()){
-						Lot.LotModif.CB_Bateau.setSelectedIndex(rs.getInt("idBateau"));
+						Lot.LotModif.CB_Bateau.setSelectedIndex(rs.getInt("num_bateau"));
 						Lot.LotModif.CB_taille.setSelectedItem(rs.getString("specification"));
 						Lot.LotModif.CB_Prése.setSelectedItem(rs.getString("presLibelle"));
 						Lot.LotModif.CB_Espe.setSelectedItem(rs.getString("nomEsp"));
@@ -412,7 +412,7 @@ public class Lot_Controller {
 		}else {
 			try {
 				   
-				   PreparedStatement st6 = con.prepareStatement("UPDATE `lot` SET `datePeche`= ? ,`idBateau`= ? ,`idEspece`= ? ,`idTaille`= ? ,`idPresentation`= ? ,`idQualite`= ? WHERE id = ? ;");
+				   PreparedStatement st6 = con.prepareStatement("UPDATE `lots` SET `date_peche`= ? ,`num_bateau`= ? ,`espece`= ? ,`id_taille`= ? ,`id_presentation`= ? ,`id_qualite`= ? WHERE id = ? ;");
 				   
 				   // ENVOIR DE LA REQ SQL ......
 				   st6.setString(1, Date+"");
@@ -470,20 +470,20 @@ public class Lot_Controller {
         	        
         	        // Récupérer les données de la base de données et les stocker dans data
         	        try {
-        	            PreparedStatement st = con.prepareStatement("SELECT * FROM lot WHERE lot.id = ?;");
+        	            PreparedStatement st = con.prepareStatement("SELECT * FROM lots WHERE lots.id = ?;");
         	            	st.setString(1, id);
         	            	ResultSet rs = st.executeQuery();
         	            	while (rs.next()) {
         	            		String[] row1 = new String[3];
         	            		row1[0] = "ID : " + rs.getString("id");
-        	            		row1[1] = "Date pêche : " + rs.getString("datePeche");
-        	            		row1[2] = "ID Espèce : " + rs.getString("idEspece");
+        	            		row1[1] = "Date pêche : " + rs.getString("date_peche");
+        	            		row1[2] = "ID Espèce : " + rs.getString("espece");
         	            		data.add(row1);
         	                
         	            		String[] row2 = new String[3];
-        	            		row2[0] = "ID Taille : " + rs.getString("idTaille");
-        	            		row2[1] = "ID Présentation : " + rs.getString("idPresentation");
-        	                	row2[2] = "ID Qualité : " + rs.getString("idQualite");
+        	            		row2[0] = "ID Taille : " + rs.getString("id_taille");
+        	            		row2[1] = "ID Présentation : " + rs.getString("id_presentation");
+        	                	row2[2] = "ID Qualité : " + rs.getString("id_qualite");
         	                	data.add(row2);
         	                	}
         	            } catch (SQLException ex) {

@@ -129,7 +129,7 @@ public class ListBac extends JFrame {
 	            if (result == JOptionPane.YES_OPTION) {
 	            	PreparedStatement st;
 					try {
-						st = con.prepareStatement("DELETE FROM `bac` WHERE `id` = ? AND idLot = ?;");
+						st = con.prepareStatement("DELETE FROM `bac` WHERE `id` = ? AND id_lot = ?;");
 						st.setString(1, idB);
 						st.setString(2, id);
 						st.execute();

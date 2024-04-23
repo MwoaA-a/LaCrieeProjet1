@@ -59,11 +59,11 @@ public class Bac_Controller {
 	// Ajouter les données au modèle à partir de la base de données
 		PreparedStatement st;
 		try {
-			st = con.prepareStatement("SELECT bac.`id`, bateau.nom as 'nomBat', lot.datePeche, bac.IdLot, typebac.tare FROM `bac` INNER JOIN typebac ON typebac.id = bac.idTypeBac INNER JOIN lot ON lot.id = bac.IdLot INNER JOIN bateau ON lot.Idbateau = bateau.id WHERE bac.idLot = ? ORDER BY id ASC;");
+			st = con.prepareStatement("SELECT bac.`id`, bateau.nom as 'nomBat', lots.date_peche, bac.id_lot, type_bac.tare FROM `bac` INNER JOIN type_bac ON type_bac.id = bac.id_type_bac INNER JOIN lots ON lots.id = bac.id_lot INNER JOIN bateau ON lots.num_bateau = bateau.id WHERE bac.id_lot = ? ORDER BY id ASC;");
 			st.setString(1, Bac.ListBac.idGlo);
 			ResultSet rs = st.executeQuery();
 			while (rs.next()){
-				Bac.ListBac.model.addRow(new Object[]{rs.getString("id"),rs.getString("idLot"),rs.getString("datePeche"),rs.getString("nomBat"),rs.getString("tare")});
+				Bac.ListBac.model.addRow(new Object[]{rs.getString("id"),rs.getString("id_lot"),rs.getString("date_peche"),rs.getString("nomBat"),rs.getString("tare")});
 				
 			}
 		} catch (SQLException e) {
@@ -75,7 +75,7 @@ public class Bac_Controller {
 		// Création du tableau "pres" pour les presentations...
 				try{
 					Statement st = con.createStatement();
-					ResultSet rs = st.executeQuery("SELECT COUNT(*) as total FROM `typeBac`;");
+					ResultSet rs = st.executeQuery("SELECT COUNT(*) as total FROM `type_bac`;");
 					while (rs.next()){
 						int total = rs.getInt("total");
 					    Bac.BacAdd.tyba = new Object[total][2];
@@ -87,7 +87,7 @@ public class Bac_Controller {
 				// Ajouts des "nom" et "id" pour les bateaux...
 				try{
 					Statement st = con.createStatement();
-					ResultSet rs = st.executeQuery("SELECT tare, id FROM `typeBac`;");
+					ResultSet rs = st.executeQuery("SELECT tare, id FROM `type_bac`;");
 					while (rs.next()){
 						Bac.BacAdd.tyba[(rs.getRow()-1)][0] = rs.getString("tare");
 						Bac.BacAdd.tyba[(rs.getRow()-1)][1] = rs.getString("id");
@@ -108,7 +108,7 @@ public class Bac_Controller {
 			}else {
 				try {
 					PreparedStatement st3;
-					st3 = con.prepareStatement("SELECT id FROM `bac` WHERE idLot = ? ORDER BY id ASC;");
+					st3 = con.prepareStatement("SELECT id FROM `bac` WHERE id_lot = ? ORDER BY id ASC;");
 					st3.setString(1, id);
 					ResultSet rs2 = st3.executeQuery();
 					// Créer une liste pour stocker tous les id existants
@@ -140,7 +140,7 @@ public class Bac_Controller {
 				
 				try {
 					PreparedStatement st6;
-					st6 = con.prepareStatement("INSERT INTO `bac` (`id`, `IdLot`, `idTypeBac`) VALUES (?, ?, ?);");
+					st6 = con.prepareStatement("INSERT INTO `bac` (`id`, `id_lot`, `id_type_bac`) VALUES (?, ?, ?);");
 					// ENVOIR DE LA REQ SQL ......
 					  st6.setInt(1, idBac);
 					  st6.setString(2, id);
@@ -169,7 +169,7 @@ public class Bac_Controller {
 		// Création du tableau "pres" pour les presentations...
 				try{
 					Statement st = con.createStatement();
-					ResultSet rs = st.executeQuery("SELECT COUNT(*) as total FROM `typeBac`;");
+					ResultSet rs = st.executeQuery("SELECT COUNT(*) as total FROM `type_bac`;");
 					while (rs.next()){
 						int total = rs.getInt("total");
 					    Bac.BacModif.tyba = new Object[total][2];
@@ -181,7 +181,7 @@ public class Bac_Controller {
 				// Ajouts des "nom" et "id" pour les bateaux...
 				try{
 					Statement st = con.createStatement();
-					ResultSet rs = st.executeQuery("SELECT tare, id FROM `typeBac`;");
+					ResultSet rs = st.executeQuery("SELECT tare, id FROM `type_bac`;");
 					while (rs.next()){
 						Bac.BacModif.tyba[(rs.getRow()-1)][0] = rs.getString("tare");
 						Bac.BacModif.tyba[(rs.getRow()-1)][1] = rs.getString("id");
@@ -201,7 +201,7 @@ public class Bac_Controller {
 				
 				try {
 					PreparedStatement st6;
-					st6 = con.prepareStatement("UPDATE `bac` SET `idTypeBac`= ? WHERE `id` =  ? AND `IdLot` = ? ;");
+					st6 = con.prepareStatement("UPDATE `bac` SET `id_type_bac`= ? WHERE `id` =  ? AND `id_lot` = ? ;");
 					// ENVOIR DE LA REQ SQL ......
 					  st6.setString(1, (Bac.BacModif.tyba[Bac.BacModif.CB_TB.getSelectedIndex()][1]+""));
 					  st6.setString(2, idBac);

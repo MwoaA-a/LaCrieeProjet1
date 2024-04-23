@@ -10,7 +10,7 @@ public class connexion {
 	
 	public static Connection connexion(){
 		try {
-			con = DriverManager.getConnection("jdbc:mysql:///bddcriee2","root","");
+			con = DriverManager.getConnection("jdbc:mysql:///bddcriee","root","");
 			System.out.println("La connexion à la base de données à reussi.");
 		} catch (SQLException e1) {
 			JOptionPane.showMessageDialog(null, "Problème de connexion à la base de donnée.", "Erreur", JOptionPane.INFORMATION_MESSAGE);

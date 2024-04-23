@@ -179,7 +179,7 @@ public class ListLot extends JFrame {
 	            if (result == JOptionPane.YES_OPTION) {
 	            	PreparedStatement st;
 					try {
-						st = con.prepareStatement("DELETE FROM `lot` WHERE `id` = ? ;");
+						st = con.prepareStatement("DELETE FROM `lots` WHERE `id` = ? ;");
 						st.setString(1, id);
 						st.execute();
 					} catch (SQLException e1) {
