@@ -69,3 +69,11 @@ Pour pouvoir tester le projet, il faut la base de données MySQL, et bien évide
 ### La Base de données MySQL :
 
 [Base de données MySQL](bddcriee.sql)
+
+### Les cas D'utilisations :
+
+[cas D'utilisations](casutil.docx)     (à télécharger car non visible sur GitHub)
+
+### Les jeux de tests :
+
+[jeux de tests](jeuxtests.docx)      (à télécharger car non visible sur GitHub)
